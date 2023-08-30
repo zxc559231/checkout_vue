@@ -29,11 +29,7 @@
                     <p class="cardName">{{prod.name}}</p>
                     <p>{{prod.spec}}</p>
                     <p>NT$ {{prod.price}}</p>
-                    <div class="btn">
-                        <button>-</button>
-                        <div>{{prod.count}}</div>
-                        <button>+</button>
-                    </div>
+                    <input type="number" v-model="count" min="0">
                     <p>${{prod.price * prod.count}}</p>
                 </div>
             </div>
