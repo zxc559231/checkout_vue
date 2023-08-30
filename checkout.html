@@ -29,12 +29,14 @@
                     <p class="cardName">{{prod.name}}</p>
                     <p>{{prod.spec}}</p>
                     <p>NT$ {{prod.price}}</p>
-                    <input type="number" v-model="count" min="0">
+                    <input type="number" v-model="prod.count" min="0">
                     <p>${{prod.price * prod.count}}</p>
                 </div>
             </div>
+            <p>共{{prodCount}}項</p>
+            <p>總計：{{}}</p>
         </div>
-        <p>共{{prodCount}}項</p>
+
     </div>
 
 
@@ -79,6 +81,10 @@
                     return this.products.length
                 },
             },
+
+            methods: {
+
+            }
 
         }).mount("body");
 
