@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+</head>
+
+<body>
+    <div class="wrap">
+        <h1>購物車</h1>
+
+        <div class="title">
+            <p v-for="(page, index) in title" :key="index">
+                {{title[index]}}
+            </p>
+        </div>
+
+        <div v-if="prodCount === 0">
+            nodate
+        </div>
+        <div class="main-wrap" v-else>
+            <div v-for="prod in products" :key="prod.id">
+                <div v-if="prod" class="card">
+                    <div class="pic">
+                        <img :src="prod.image" :alt="prod.title">
+                    </div>
+                    <p class="cardName">{{prod.name}}</p>
+                    <p>{{prod.spec}}</p>
+                    <p>NT$ {{prod.price}}</p>
+                    <div class="btn">
+                        <button>-</button>
+                        <div>{{prod.count}}</div>
+                        <button>+</button>
+                    </div>
+                    <p>${{prod.price * prod.count}}</p>
+                </div>
+            </div>
+        </div>
+        <p>共{{prodCount}}項</p>
+    </div>
+
+
+    <script src="https://unpkg.com/vue@next"></script>
+
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    title: ['商品名稱', '規格', '小計', '購買數量', '合計'],
+                    products: [
+                        {
+                            id: 1,
+                            image: 'image/product_candy.png',
+                            name: '千歲梅飴',
+                            spec: '200g / 瓶',
+                            price: 100,
+                            count: 1
+                        },
+                        {
+                            id: 2,
+                            image: 'image/product_crackers.png',
+                            name: '仙貝菓子',
+                            spec: '50g / 包',
+                            price: 50,
+                            count: 2
+                        },
+                        {
+                            id: 3,
+                            image: 'image/product_amber.png',
+                            name: '琥珀糖',
+                            spec: '100g / 包',
+                            price: 60,
+                            count: 2
+                        },
+                    ],
+                }
+            },
+
+            computed: {
+                prodCount() {
+                    return this.products.length
+                },
+            },
+
+        }).mount("body");
+
+    </script>
+
+</body>
+
+</html>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    body {
+        background-color: #EFEDE1;
+    }
+
+    .wrap {
+        background-color: #F9FAF5;
+    }
+
+    .title,
+    .btn,
+    .card {
+        display: flex;
+    }
+
+    .pic {
+        width: 150px;
+        height: 150px;
+        background-color: #F9FAF5;
+        border: 20px solid #fff;
+        box-sizing: border-box;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .pic img {
+        width: 90%;
+    }
+
+    .btn {
+        height: 30px;
+        /*改 */
+    }
+</style>
