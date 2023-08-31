@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shopping Cart</title>
+    <script src="https://kit.fontawesome.com/1efcba22ec.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -13,40 +14,44 @@
 
         <div class="title">
             <p v-for="(page, index) in title" :key="index">
-                {{title[index]}}
+                {{page}}
             </p>
         </div>
-
-        <div v-if="prodCount === 0">
-            nodate
+        <div class="delimiter"></div>
+        <div v-if="prodCount === 0" class="no">
+            購物車內沒有任何商品
         </div>
         <div class="main-wrap" v-else>
-            <div v-for="prod in products" :key="prod.id">
+            <div v-for="prod in products" :key="index">
                 <div v-if="prod" class="card">
-                    <div class="pic">
-                        <img :src="prod.image" :alt="prod.title">
+                    <div>
+                        <div class="pic">
+                            <img :src="prod.image" :alt="prod.name">
+                        </div>
                     </div>
                     <p class="cardName">{{prod.name}}</p>
                     <p>{{prod.spec}}</p>
                     <p>NT$ {{prod.price}}</p>
-                    <input type="number" v-model="prod.count" min="0">
-                    <p>${{prod.price * prod.count}}</p>
+                    <div>
+                        <input type="number" v-model="prod.count" min="0" @input="calculateTotalAmount">
+                    </div>
+                    <p>{{prod.price * prod.count}}</p>
+                    <div @click="delet(index)"><i class="fa-solid fa-trash-can"></i></div>
                 </div>
             </div>
-            <p>共{{prodCount}}項</p>
-            <p>總計：{{}}</p>
         </div>
-
+        <div class="delimiter"></div>
+        <p>共{{prodCount}}項</p>
+        <p>總計&nbsp&nbsp&nbspNT$ {{totalAmount}}</p>
     </div>
 
 
     <script src="https://unpkg.com/vue@next"></script>
-
     <script>
         Vue.createApp({
             data() {
                 return {
-                    title: ['商品名稱', '規格', '小計', '購買數量', '合計'],
+                    title: ['商品圖片', '商品名稱', '規格', '小計', '購買數量', '合計', '刪除'],
                     products: [
                         {
                             id: 1,
@@ -54,7 +59,7 @@
                             name: '千歲梅飴',
                             spec: '200g / 瓶',
                             price: 100,
-                            count: 1
+                            count: 2
                         },
                         {
                             id: 2,
@@ -62,7 +67,7 @@
                             name: '仙貝菓子',
                             spec: '50g / 包',
                             price: 50,
-                            count: 2
+                            count: 3
                         },
                         {
                             id: 3,
@@ -70,9 +75,10 @@
                             name: '琥珀糖',
                             spec: '100g / 包',
                             price: 60,
-                            count: 2
+                            count: 5
                         },
                     ],
+                    totalAmount: 0,
                 }
             },
 
@@ -83,13 +89,22 @@
             },
 
             methods: {
-
+                calculateTotalAmount() {
+                    this.totalAmount = this.products.reduce((total, prod) => {
+                        return total + prod.price * prod.count;
+                    }, 0);
+                },
+                delet(index) {
+                    this.products.splice(index, 1);
+                    this.calculateTotalAmount();
+                },
+            },
+            mounted() {
+                this.calculateTotalAmount();
             }
-
         }).mount("body");
 
     </script>
-
 </body>
 
 </html>
@@ -99,6 +114,14 @@
         margin: 0;
         padding: 0;
         list-style: none;
+        color: #4d4d4d;
+        font-size: 15px;
+    }
+
+    h1 {
+        font-size: 35px;
+        text-align: center;
+        padding: 40px;
     }
 
     body {
@@ -107,17 +130,59 @@
 
     .wrap {
         background-color: #F9FAF5;
+        margin: 20px;
+        border-radius: 20px;
     }
 
-    .title,
-    .btn,
+    .no {
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+        padding: 40px;
+    }
+
     .card {
         display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 1%;
     }
 
-    .pic {
-        width: 150px;
-        height: 150px;
+    .card p,
+    .card div {
+        width: 13%;
+    }
+
+
+    .title {
+        display: flex;
+        justify-content: center;
+        margin: 10px 1%;
+    }
+
+    .title p {
+        width: 13%;
+    }
+
+    .title p:nth-child(1) {
+        padding-left: 10px;
+        box-sizing: border-box;
+    }
+
+    .card input {
+        width: 50px;
+        height: 30px;
+        border: none;
+        border-radius: 3px;
+        background: #FFF;
+        box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.10);
+        text-align: center;
+        font-size: 14px;
+    }
+
+    .card .pic {
+        width: 130px;
+        height: 130px;
         background-color: #F9FAF5;
         border: 20px solid #fff;
         box-sizing: border-box;
@@ -131,8 +196,26 @@
         width: 90%;
     }
 
-    .btn {
-        height: 30px;
-        /*改 */
+    .fa-solid {
+        color: #333;
+    }
+
+    .delimiter {
+        width: 95%;
+        border: 1px solid #EAE8DB;
+        margin: 30PX auto;
+    }
+
+    .wrap>p {
+        width: 91%;
+        margin: auto;
+        text-align: right;
+        padding: 0 10% 40px 0;
+        box-sizing: border-box;
+    }
+
+    .wrap>p:last-of-type {
+        font-size: 18px;
+        font-weight: bold;
     }
 </style>
